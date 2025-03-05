@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Text Animation</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 1px black; /* Debugging */
+        }
+        .letter {
+            position: absolute;
+            font-size: 20px;
+            font-weight: bold;
+            color: red;
+            border: 1px solid red; /* Debugging */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const text = "I LOVE YOU";
+            const container = document.getElementById("container");
+
+            if (!container) {
+                console.error("Container not found!");
+                return;
+            }
+            console.log("Container found:", container);
+
+            let letters = [];
+
+            // Create letter elements
+            for (let i = 0; i < text.length; i++) {
+                let span = document.createElement("span");
+                span.innerText = text[i];
+                span.classList.add("letter");
+                container.appendChild(span);
+                letters.push(span);
+            }
+
+            console.log("Letters created:", letters);
+
+            let t = 0;
+            function animateHeart() {
+                if (letters.length === 0) return;
+
+                t += 0.05; // Adjust speed
+
+                for (let i = 0; i < letters.length; i++) {
+                    if (!letters[i]) continue;
+
+                    let angle = (i / letters.length) * (2 * Math.PI);
+                    let heartT = t + angle;
+
+                    let x = 16 * Math.pow(Math.sin(heartT), 3);
+                    let y = 13 * Math.cos(heartT) - 5 * Math.cos(2 * heartT) - 2 * Math.cos(3 * heartT) - Math.cos(4 * heartT);
+
+                    let scale = 15;
+                    let offsetX = 200;
+                    let offsetY = 200;
+
+                    letters[i].style.transform = `translate(${x * scale + offsetX}px, ${-y * scale + offsetY}px)`;
+                }
+
+                requestAnimationFrame(animateHeart);
+            }
+
+            animateHeart();
+        });
+    </script>
+
+</body>
+</html>
